@@ -1,0 +1,1130 @@
+\documentclass[12pt, a4paper]{article}
+%------------%
+% usepackage %
+%------------%
+\usepackage[utf8]{inputenc}         % Uses utf8
+\usepackage[T1]{fontenc}            % Accented characters are treated as single characters
+\usepackage[english,italian]{babel} % Multilanguage document, Italian as default language
+\usepackage{graphicx}               % Required for inserting images
+\usepackage{amsmath, amssymb}       % Math & Symbols
+\usepackage{geometry}               % For margins
+\usepackage{setspace}               % For linespacing
+\usepackage{hyperref}               % Clickable Links
+\usepackage{biblatex}               % Bibliography
+\usepackage{csquotes}
+\usepackage{float}
+\usepackage{imakeidx}
+
+%-----------------%
+% Page Formatting %
+%-----------------%
+\onehalfspacing{}                   %Line Spacing
+
+\geometry{                          %Margins
+    left    = 3cm,
+    right   = 3cm,
+    top     = 3cm,
+    bottom  = 3cm
+}
+%------%
+% Data %
+%------%
+\title{
+    \textbf{SignVR}\\   
+    \large  Traduzione in tempo reale\\
+            da Inglese ad American Sign Language\\
+            in Realtà Mista}
+    
+\author{Elena Giunta,\\
+        Davide Leotta,\\ 
+        Damiano Rinaldi}
+\date{Febbraio 2026}
+
+\addbibresource{SignVR.bib}
+\begin{document}
+%---------------------------------%%---------------------------------%%---------------------------------%
+\maketitle
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=1.2]{Img/Default_Icon.png}
+\end{figure}
+
+\newpage
+\tableofcontents
+\newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+\section{Introduzione}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    SignVR è un \textit{software} di Realtà Mista per la \textbf{traduzione in tempo reale} dalla 
+    lingua Inglese alla Lingua dei Segni Americana.
+    Il progetto si pone sia come strumento comunicativo per persone affette da disabilità 
+    uditiva, fornendo un \textbf{interprete personale} all'utente, che come strumento 
+    didattico di primo approccio alla lingua dei segni e notazione \textit{Gloss.}
+    Il sistema, sviluppato in Unity per Meta Quest 3, si divide in tre componenti 
+    fondamentali: un modulo di \textit{Speech-To-Text}, con conseguente trascrizione in 
+    \textit{Gloss}, un assistente virtuale che interpreta il parlato in 
+    \textit{American Sign Language} ed un pannello di impostazioni che permette di 
+    personalizzare l'esperienza utente.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{figure}[H]
+        \centering 
+        \includegraphics[]{Img/TitleMenu.png}
+        \caption{\textit{Combination Mark} di \textbf{SignVR}, il simbolo affiancato al testo
+        rappresenta il termine "Interprete" in \textit{American Sign Language}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+\section{Disabilità Uditiva e American Sign Language}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{L'Impatto della disabilità uditiva sulla popolazione globale}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La disabilità uditiva è una limitazione che impatta quotidianamente la vita di 
+        \textbf{430 milioni di persone}; il dato è destinato a salire: si stima che il 10\% 
+        della popolazione globale, entro il 2050, avrà una forma invalidante di perdita 
+        d'udito.\cite{who}\footnote{Una perdita d'udito superiore ai 35dB nell'orecchio 
+        minormente compromesso è considerata invalidante\cite{who}.}
+        La perdita d'udito è la forma più diffusa di disabilità 
+        sensoriale\cite{gbd}\cite{gbdwh}, la popolazione coinvolta ha difficoltà maggiori 
+        in ambito comunicativo, è più predisposta all'isolamento e alla stigmatizzazione 
+        sociale, può avere maggiori difficoltà in contesti lavorativi e 
+        vede esiti generalmente peggiori nei temi di salute 
+        fisica e mentale.\cite{healthoutcomedeaf}\cite{who}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Struttura e funzionamento dell'\textit{American Sign Language}}
+        L'\textit{American Sign Language} è il linguaggio visuale di riferimento per la 
+        popolazione sorda degli Stati Uniti d'America\footnote{Il 3\% della popolazione 
+        Americana conosce l'\textit{ASL}, l'83\% della quale è popolazione udente.}
+        e del Canada anglofono\cite{ethnologuease}\cite{howmanypeopleusesignlanguage}. 
+        Il linguaggio si basa sui seguenti elementi:
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item \textit{Handshape}: forma assunta dalla mano 
+            (dita tese, mano chiusa a pugno ecc.);
+
+            \item \textit{Orientation}: direzione su cui punta il palmo della mano 
+            (parallelamente al corpo dell'interprete, verso il corpo dell'interprete ecc.);
+
+            \item \textit{Location}: da dove viene eseguito il movimento rispetto il corpo 
+            dell'interprete (fronte, petto ecc.);
+
+            \item \textit{Movement}: se il movimento viene ripetuto, 
+            ha un andamento circolare o viene eseguito una sola volta;
+
+            \item \textit{Non-Manual Expressions}.\footnote{le \textit{NME} 
+            vengono utilizzate principalmente per punteggiatura, intonazione e grammatica.}: 
+            mimica facciale, movimenti di sopracciglia e bocca, rotazione del capo
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+\section{Tecnologie e Datasets}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    Per lo sviluppo di \textbf{SignVR} sono state utilizzate diverse tecnologie e 
+    incrociate le animazioni di due \textit{datasets}, segue un elenco di ciò 
+    che ha reso possibile lo sviluppo del software.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Meta Quest 3}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    Terza generazione della linea \textit{Meta Quest}\footnote{originariamente chiamato 
+    \textit{Oculus Quest}.}, è un dispositivo VR \textit{all-in-one} lanciato sul mercato ad 
+    ottobre 2023\cite{vrcompare_quest3}
+    Meta è l'attuale leader di mercato nel settore dei \textit{VR Headsets} con un 
+    \textit{Market Share} del 74.6\%\cite{idc_xr_market_2025} e garantisce la 
+    \textit{Forward-Compatibility} per le successive generazioni di dispositivi 
+    \textit{\textbf{Horizon OS}},\cite{meta_horizon_compatibility}
+    rendendola una importante piattaforma di sviluppo.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.1]{Img/lookaside.fbsbx.png}
+        \caption{Immagine promozionale per il \textit{Meta Quest 3}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{\textbf{Unity}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È una piattaforma di sviluppo \textit{Cross-Platform} impiegata nello sviluppo di 
+    giochi digitali, simulatori ed esperienze interattive.\cite{unity_manual_2026}
+    In ambito XR, \textbf{Unity} è il \textit{Game Engine} prevalente: è stato utilizzato per 
+    sviluppare oltre il 70\% dei giochi più venduti nel \textit{Quest Store}\cite{unity_xr_solutions_2026}\footnote{\textit{Marketplace di riferimento per applicazioni native \textit{\textbf{Horizon OS}}}.} 
+    ed è generalmente considerata una piattaforma accessibile, 
+    flessibile e ben ottimizzata rispetto l'uso delle risorse e requisiti 
+    \textit{hardware}\cite{arxiv_vr_engine_2025}. 
+%---------------------------------%%---------------------------------%%---------------------------------%    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.2]{Img/unityhomepage.jpeg}
+        \caption{\textit{Homepage} del sito \textit{Unity.com}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Meta XR Interaction SDK}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È uno \textit{Standard Development Kit} fornito da \textit{Meta} per aggiungere 
+    interazioni con \textit{controller}, mani e \textit{body pose}\cite{meta_xr_interaction_sdk}.
+    Il suo impiego in permette di testare ed implementare rapidamente le 
+    \textit{features} interattive dell'applicazione.
+%---------------------------------%%---------------------------------%%---------------------------------%    
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.3]{Img/MetaXRInteractionSDK.jpeg}
+        \caption{\textit{Meta XR Interaction SDK} nello \textit{Unity Asset Store}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%    
+    \subsection{Meta Building Blocks}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È un'estenzione di \textbf{Unity} fornita da Meta Platforms, Inc. 
+    per velocizzare lo sviluppo e facilitare l'utilizzo di funzionalità dei dispositivi 
+    \textit{Meta Quest}\cite{meta_horizon_building_blocks}.
+    L'utilizzo dei \textbf{building blocks}, definiti da Meta come 
+    \textquote{unità atomiche delle funzionalità \textit{Meta Quest}} 
+    ha favorito lo sviluppo di \textbf{SignVR} semplificando e velocizzando 
+    l'implementazione di nuove \textit{features}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.2]{Img/buildingblocks.png}
+        \caption{Interfaccia \textbf{Building Blocks} in \textbf{Unity}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Meta Voice SDK}
+        \label{metavoice}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È uno \textit{Standard Development Kit} sviluppato da Meta Platforms Inc. 
+    per l'implementazione dei comandi vocali\cite{meta_voice_sdk}.
+    Viene utilizzato in \textbf{SignVR} per permettere lo \textit{Speech-To-Text}, 
+    grazie alla sua integrazione con \textbf{Wit.ai}\ref{witai}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{figure}[H]
+        \centering 
+        \includegraphics[scale=0.3]{Img/voiceSDK.jpeg}
+        \caption{\textit{Meta Voice SDK} nell'\textit{Unity Asset Store}.}
+    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{WIT.ai}
+        \label{witai}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        È una piattaforma di \textit{Natural Language Processing} 
+        per l'integrazione di funzionalità basate su comandi vocali. 
+        La piattaforma \textit{WIT.ai}, insieme a \textit{Meta Voice SDK}\ref{metavoice}, 
+        viene utilizzata per l'integrazione dello \textit{Speech-To-Text}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/wit.ai.jpeg}
+            \caption{Pannello impostazioni della piattaforma \textit{Wit.ai}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{LLaMA}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \textit{Large Language Meta AI} è una serie di modelli linguistici di grandi 
+    dimensioni\footnote{i \textit{Large Language Models} sono algoritmi di intelligenza 
+    artificiale capaci di generare un nuovo contenuto testuale a partire da grandi 
+    \textit{dataset} preesistenti sfruttando tecnologie di \textit{Deep Learning}.} 
+    \textit{Open-Source} sviluppata da Meta Platforms, Inc\cite{meta_llama_2024}.
+    L'impiego in \textbf{SignVR} è stato fondamentale per l'implementazione della 
+    traduzione in tempo reale da lingua inglese a \textit{Gloss}: 
+    \textbf{SignVR} utilizza \textit{\textbf{LLaMA 3.3 70B Versatile}}, 
+    un modello \textit{Text-Only} e \textit{Instruction-Tuned}\footnote{Nello sviluppo 
+    di modelli linguistici di grandi dimensioni, si riferisce allo sviluppo di un modello 
+    in modo da predisporlo alla comprensione e corretta esecuzione di istruzioni.}
+    che, attraverso l'inserimento di un \textit{prompt}\footnote{nell'interazione 
+    con un modello di intelligenza artificiale generativa, un \textit{prompt} è un 
+    \textit{input} di istruzioni fornite dall'utente al fine di generare un contenuto.}, 
+    concatenato tra il dialogo ottenuto dalle funzionalità di \textit{Speech-to-Text} 
+    e un \textit{set} di istruzioni, 
+    fornisce in \textit{output} il testo in notazione \textit{Gloss}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Piattaforma di Inferenza: \textbf{Groq}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È un servizio che offre capacità di inferenza\footnote{nell'ambito dell'intelligenza 
+    artificiale, è il processo che permette ad un modello di applicare le sue conoscenze 
+    pregresse a dei nuovi dati per trarre delle conclusioni.}
+    ad alta velocità attraverso la tecnologia proprietaria 
+    \textit{Language Processing Unit} (LPU)\cite{groq2024lpura}. 
+    l'impiego di \textbf{Groq} nello sviluppo di \textbf{SignVR} è stato centrale in 
+    quanto garantisce tempi di risposta adatti ad una applicazione che opera in tempo reale.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{Img/groq.jpeg}
+            \caption{Articolo riguardante la tecnologia 
+            \textit{LPU} dal sito ufficiale di \textbf{Groq}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{\textbf{Mixamo}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È una piattaforma \textit{Web-based} sviluppata da \textbf{Adobe} che fornisce 
+    strumenti avanzati di \textit{Auto-Rigging} e una ampia libreria di modelli e 
+    animazioni\cite{adobe_mixamo_2026}.
+    L'utilizzo di \textbf{Mixamo} ha favorito lo sviluppo di \textbf{SignVR} grazie ai diversi 
+    modelli umani forniti dalla piattaforma.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{Img/mixamo.jpeg}
+            \caption{Intefraccia principale dell'applicazione \textbf{Mixamo}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Affinity}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        È una \textit{Suite} di strumenti creativi sviluppata da 
+        \textbf{Serif}\cite{serif_affinity}. Il \textit{software} è stato utilizzato 
+        per la graficazione dei \textit{Backplates} dell'interfaccia utente\ref{interfaccia} 
+        e la produzione di altri elementi grafici all'interno dell'applicazione.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{Img/affinity.jpeg}
+            \caption{Schermata del \textit{software} \textbf{Affinity}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Blender}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    È un \textit{software Open-Source} sviluppato dalla 
+    Blender Foundation\cite{blender_software}. Mira ad offrire una 
+    \textit{Suite} di strumenti per modellazione ed animazione 3D, animazione 2D, 
+    \textit{Compositing}, montaggio video e simulazioni fisiche.
+    Il suo impiego nello sviluppo di \textbf{SignVR} è stato centrale per la 
+    normalizzazione e rielaborazione delle animazioni.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.2]{Img/defaultcube.jpeg}
+            \caption{Scena di \textit{default} del \textit{software} \textbf{Blender}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{\textit{Animation Datasets}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Provenienza delle animazioni}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \textbf{SignVR} utilizza un set di animazioni ottenute tramite la 
+        normalizzazione di due \textit{Datasets}:
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item \textit{\textbf{3D-LEX v1.0: 3D Lexicons for American Sign 
+            Language and Sign Language of the Netherlands}}\cite{3dlex}
+            \footnote{Lo studio, riguardante la cattura in 3D della lingua dei segni, 
+            fornisce un \textit{Dataset} consultabile presso \textit{Open Science Framework}} 
+            \item \textit{\textbf{SLMocapArchive}}\cite{studiogalt_mocap_archive}
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Normalizzazione e rielaborazione}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Alcune caratteristiche delle animazioni, come durata e \textit{frame-rate} 
+        non erano favorevoli per l'utilizzo impiegato da \textbf{SignVR},
+        inoltre le \textit{Key-Poses}\footnote{In animazione, pose principali che 
+        forniscono il contesto necessario ad interpretare il movimento che viene eseguito.} 
+        non erano allineate secondo uno \textit{Standard} preciso.
+        È stata effettuata effettuata una normalizzazione a 60 \textit{frames} 
+        per secondo seguendo le seguenti linee guida: 
+        \label{regoleAnimazione}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item Tutte le animazioni vengono riprodotte in 120 \textit{frames};
+            \item \textit{\textbf{Frames 0-40:}} il \textit{rig} passa da posizione 
+            \textit{idle}\footnote{In animazione, posizione di riposo assunta da un modello 
+            quando non sta performando nessuna azione.} al primo posizionamento utile alla 
+            riproduzione del segno;
+            \item \textit{\textbf{Frames 40-80:}} Il \textit{rig} esegue il simbolo,
+            \item \textit{\textbf{Frames 80-120}} il \textit{rig} passa dal gesto eseguito 
+            alla posizione \textit{idle}.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        È inoltre stata introdotta una animazione di \textit{idle} e 
+        normalizzata la posizione iniziale e finale assunta dal rig in ogni animazione.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Limitazioni tecniche nell'implementazione delle animazioni}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \label{limitazionidataset}
+        Data la diversa provenienza delle clip animate, il materiale raccolto 
+        presentava caratteristiche tecniche eterogenee, non essendo stato originariamente 
+        prodotto per un'applicazione specifica come \textbf{SignVR}. 
+        In particolare, i \textit{rig} inclusi nei \textit{dataset} risultavano privi di 
+        una struttura ossea facciale o di \textit{shape keys} dedicate alla mimica.
+        Come conseguenza diretta, l'implementazione delle \textit{Non-Manual Expressions} 
+        non è stata possibile.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Implementazione limitata del vocabolario \textit{ASL}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Vista la natura manuale del processo di normalizzazione delle animazioni, 
+        l'implementazione totale del vocabolario \textit{ASL} all'interno di 
+        \textbf{SignVR} non è stata possibile.
+        Per rendere il \textit{software} funzionante in ogni scenario virtualmente 
+        possibile, viene riprodotto uno \textit{spelling} quando 
+        incontra un termine non contenuto nel vocabolario.
+        Il vocabolario di \textbf{SignVR} include, allo stato attuale, tutto l'alfabeto inglese ed un 
+        totale di 40 vocaboli.
+%---------------------------------%%---------------------------------%%---------------------------------%
+\section{Il software}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Introduzione}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    L'obbiettivo di \textbf{SignVR} è fornire un ambiente di supporto alla comunicazione 
+    per individui ,
+    oltre che una piattaforma di supporto allo sviluppo di competenze in 
+    \textit{Gloss} e \textit{American Sign Language}.
+    Per ottenere il risultato desiderato è stato neccesario seguire i seguenti punti chiave: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{itemize}
+        \item \textbf{Riduzione dei tempi di risposta e di attesa da parte dell'utente}: l'applicazione deve fornire informazioni all'utente con la maggior rapidità possibile,
+        ciò non riguarda solo i tempi di risposta per la trascrizione in \textit{Gloss} ma anche la celerità nella consegna della traduzione da parte dell'interpete, oltre che la durata
+        della traduzione stessa;
+        \item \textbf{Interfaccia intuitiva}: l'utente deve poter riconoscere intuitivamente il comportamento dei moduli che compongono l'interfaccia, 
+        essi devono essere autodescrittivi, seguire una corretta gerarchia e vanno posizionati in un'ordine che rispetti il \textit{workflow} del \textit{software} stesso;
+        \item \textbf{Accessibilità e supporto alla comunicazione}: il mantenimento del contatto visivo con l'interlocutore è fondamentale per una corretta comunicazione, l'interfaccia deve assecondare questa necessità: 
+        Ove il posizionamento \textit{standard} dell'interfaccia non lo permetta, l'utente deve poter assumere il controllo, modificandone il posizionamento e comportamento al fine di venir incontro ad uno scenario specifico.
+    \end{itemize}
+            \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{Img/SignVR screens/homepage2.png}
+            \caption{Schermata iniziale di \textbf{SignVR}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{L'interfaccia}
+    \label{interfaccia}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \textbf{SignVR} permette la personalizzazione dell'esperienza utente offrendo 
+    un'interfaccia 
+        modulare ricomponibile attraverso \textit{gestures}, opzioni riguardo la visibilità 
+        ed il posizionamento degli elementi a schermo e un catalogo di avatar selezionabili.
+        Di seguito vengono analizzate nel dettaglio le tre componenti fondamentali 
+        dell'interfaccia.
+%---------------------------------%%---------------------------------%%---------------------------------%  
+        \subsubsection{\textit{Speech-To-Text} e \textit{Gloss Notation}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            Il modulo è diviso in due \textit{box} testuali. In ordine, questi contegono: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item La trascrizione del parlato, registrata dopo la pressione del tasto via 
+                \textit{controller} o \textit{gesture} da parte dell'utente 
+                fino al superamento della soglia di silenzio \ref{sogliasilenzio};
+                \item La trascrizione da inglese a \textit{Gloss}, operata da \textbf{LLaMA} \ref{trascrizioneglossllama}.
+            \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            Questa parte del programma viene divisa in due per poter permettere 
+            all'utente di oscurare o spostare i pannelli separatamente in base alle 
+            proprie esigenze:
+            un utente che vuole imparare l'\textit{American Sign Language} 
+            potrebbe preferire il \textit{box Gloss} accanto all'interprete virtuale 
+            per confrontare prima la notazione con i gesti, 
+            allo stesso tempo un utente non udente potrebbe preferire l'ordine 
+            predefinito per consultare la trascrizione in \textit{gloss} 
+            di ciò che gli è appena stato comunicato e averne una prima comprensione 
+            intuitiva.
+%---------------------------------%%---------------------------------%%---------------------------------% 
+        \subsubsection{Interprete Virtuale}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            Opposto al pannello di trascrizione del parlato vi è l'assistente virtuale, 
+            cui ruolo è fornire la traduzione dal formato di notazione \textit{Gloss} 
+            alla lingua dei segni americana.
+            L'avatar non è direttamente modificabile ma è possibile cambiarne le apparenze 
+            selezionando tra quattro possibili modelli. 
+            L'assistente, in assenza di \textit{input Gloss} da tradurre, assumerà una 
+            posizione di \textit{idle}, anche il suo posizionamento nell'interfaccia può 
+            essere modificato: per scenari dove la vista possa essere ostruita 
+            o ove
+            l'utente voglia, ad esempio, posizionarlo accanto all'interlocutore; in scenari 
+            dove l'utilizzo dell'applicazione serva come strumento di apprendimento, un 
+            utente potrebbe voler concentrarsi sulla trascrizione in \textit{Gloss} e 
+            voler oscurare l'interprete del tutto.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \begin{minipage}[t]{0.46\textwidth}
+            \includegraphics[width=\textwidth]{Img/SignVR screens/Eliza.png}
+           \caption{Eliza, interprete virtuale di \textit{default} in \textbf{SignVR}}                
+            \end{minipage}
+            \hfill
+            \begin{minipage}[t]{0.38\textwidth}
+            \includegraphics[width=\textwidth]{Img/SignVR screens/Giulio.png}
+           \caption{Giulio, interprete virtuale in \textbf{SignVR}}                
+            \end{minipage}            
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Impostazioni e personalizzazione dell'esperienza utente}
+        \label{impostazioni}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        È possibile accedere al pannello di impostazioni utilizzando il 
+        \textit{controller Meta Quest} o attraverso \textit{gestures}.
+        Il pannello delle impostazioni permette di effettuare le seguenti operazioni: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item \textbf{Navigazione dell'applicazione}: accesso ai crediti, alla 
+                schermata di \textit{Home}, tasto \textit{Resume} per ritornare alla 
+                traduzione e chiusura dell'applicazione;
+                \item \textbf{\textit{Display Avatar}}: di norma attivo, permette di 
+                mostrare o nascondere l'interprete virtuale;
+                \item \textbf{\textit{Display ASL Transcription}}: di norma attivo, 
+                permette di mostrare o nascondere il pannello di trascrizione in \textit{Gloss};
+                \item \textbf{\textit{Display English Transcription}}: di norma attivo, 
+                permette di mostrare o nascondere il pannello di trascrizione del testo in 
+                lingua inglese;
+                \item \textbf{\textit{Head Tracking Mode}}: Comunica all'applicazione 
+                se l'interfaccia deve seguire lo sguardo dell'utente o rimanere fissa 
+                nella sua posizione di origine;
+                \item \textbf{\textit{Avatar Selection}}: Permette di scegliere quale 
+                \textit{avatar} utilizzare come interprete virtuale;
+                \item \textbf{\textit{Tutorial}}: Permette di ricominciare il tutorial
+                di \textbf{SignVR}.
+            \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.27]{Img/SignVR screens/Settings.png}
+           \caption{Pannello delle impostazioni in \textbf{SignVR}}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Sezioni \textit{Turorial} e \textit{Credits}}
+            All'interno dell'applicazione vi sono anche un \textit{Tutorial} interattivo, 
+            che spiega le funzioni principali del \textit{software} e come potervi accedere,
+            oltre che un pannello di \textit{Credits} per ottenere maggiori informazioni 
+            sul lavoro degli sviluppatori.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \begin{minipage}[t]{0.38\textwidth}
+            \includegraphics[width=\textwidth]{Img/SignVR screens/tut1.png}
+           \caption{Scena del \textit{tutorial} di \textbf{SignVR} riguardo l'interfaccia.}                
+            \end{minipage}
+            \hfill
+            \begin{minipage}[t]{0.36\textwidth}
+            \includegraphics[width=\textwidth]{Img/SignVR screens/tut2.png}
+           \caption{Scena del \textit{tutorial} di \textbf{SignVR} sull'utilizzo dei \textit{controller}.}                
+            \end{minipage}            
+        \end{figure}    
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Implementazione dell'interfaccia utente}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            L'interfaccia utente è stata costruita a partire dalle scene di esempio del 
+            \textit{Meta XR Interaction SDK},
+            attraverso l'\textit{Inspector} di \textbf{Unity}\footnote{In 
+            \textbf{Unity}, l'\textit{Inspector} è il pannello che mostra tutte le 
+            proprietà di un oggetto all'interno della scena.}
+            sono state modificate diverse proprietà, tra cui:
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item Animazioni e suoni dei tasti;
+                \item Dimensioni e \textit{Aspect-Ratio} dei pannelli;
+                \item \textit{Backplates}\footnote{Nell'ambito delle interfacce utenti, i \textit{Backplates} sono contenitori, generalmente collocati dietro elementi dell'interfaccia stessa, che favoriscono la leggibilità e definiscono una gerarchia visiva.};
+                \item Contenuto degli elementi testuali.
+            \end{itemize}
+
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.5]{Img/SignVR screens/pinch.png}
+                \caption{Interfaccia principale di \textbf{SignVR}}
+            \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsection{Implementazione del pannello delle impostazioni e salvataggio delle 
+        \textit{PlayerPrefs}}
+            Il pannello delle impostazioni, anch'esso prodotto modificando scene d'esempio 
+            fornite dal \textit{Meta XR Interaction SDK},
+            riflette le scelte dell'utente memorizzate attraverso 
+            \textit{PlayerPrefs}\footnote{In \textbf{Unity}, \textit{PlayerPrefs} 
+            è una classe che conserva informazioni su scelte e impostazioni dell'utente.}
+            e fornisce un'interfaccia per modificarle.
+            Lo \textit{script} \textit{SettingsMenuLogic.cs} definisce una classe 
+            \textit{\textbf{SettingsMenuLogic}} che possiede:
+            \ref{setmenlog1}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item \textbf{Attributi \textit{Toggle}} per tutti i parametri cui visibilità può essere attivata o disattivata;
+                \item \textbf{Metodi} per l'inizializzazione delle preferenze su impostazioni e scelta \\dell'\textit{avatar} (\textit{InitializeBooleanSettings} e \textit{InitializeAvatarSelection});
+                \item \textbf{Metodi} per il salvataggio delle singole \textit{PlayerPrefs};
+                \item \textbf{Metodo \textit{Start}} che esegue i metodi di inizializzazione.
+            \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[h]
+                \centering
+                \includegraphics[scale=0.8]{Img/SettingsMenuLogic1.jpeg}
+                \caption{Attributi e metodo start della classe \textit{SettingsMenuLogic}.}
+                \label{setmenlog1}
+            \end{figure}    
+%---------------------------------%%---------------------------------%%---------------------------------%              
+            \newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+            La funzione \textbf{\textit{InitializeBooleanSettings}} si occupa di 
+            inizializzare i \textit{Toggle} sulla base delle \textit{PlayerPrefs}: 
+            qual'ora non siano già presenti delle preferenze, la funzione le inizializza 
+            a dei valori di \textit{default}\ref{setmenlog2},
+            essa utilizza dei \textit{Listener} per verificare se la preferenza viene 
+            successivamente modificata dall'utente.
+            \\La funzione \textbf{\textit{InitializeAvatarSelection}} scorre la lista 
+            di tutti i possibili \textit{avatar} selezionabili e li confronta con il 
+            \textit{Toggle} selezionato dall'utente, poi carica l'\textit{avatar} 
+            selezionato.
+            \\Le funzioni per il salvataggio delle \textit{PlayerPrefs} sono mostrate 
+            in figura \ref{setmenlog4}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[h]
+                \centering
+                \includegraphics[scale=0.5]{Img/SettingsMenuLogic2.jpeg}
+                \caption{Funzione \textit{InitializeBooleanSettings} in \textit{SettingsMenuLogic}.}
+                \label{setmenlog2}
+            \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.6]{Img/SettingsMenuLogic3.jpeg}
+                \caption{Funzione \textit{InitializeAvatarSelection} in 
+                \textit{SettingsMenuLogic}.}
+                \label{setmenlog3}
+            \end{figure}   
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.6]{Img/SettingsMenuLogic4.jpeg}
+                \caption{Funzioni per il salvataggio delle \textit{PlayerPrefs} in 
+                \textit{SettingsMenuLogic}.}
+                \label{setmenlog4}
+            \end{figure}   
+%---------------------------------%%---------------------------------%%---------------------------------%
+        L'applicazione delle impostazioni nell'interfaccia avviene anche mediante lo 
+        \textit{script} \textbf{\textit{SceneConfiguration.cs}}, utilizzato per applicare 
+        le preferenze utente alla scena attiva.
+        Lo \textit{script} contiene una classe \textit{\textbf{SceneConfiguration}} 
+        costituita da: 
+        \begin{itemize}
+            \item \textbf{Attributi} \textit{GameObject} e un attributo 
+            \textit{LazyFollow}\ref{lazyf}\footnote{\textit{LazyFollow} è una classe 
+            utilizzata per permettere a \textbf{SignVR} di seguire lo sguardo dell'utente, 
+            viene affrontata al paragrafo \ref{lazyf}.};
+            \item \textbf{Metodi} \textit{Start()}, utilizzato all'avvio dello 
+            \textit{script}, e \textit{ApplySettings()}.
+        \end{itemize} 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.8]{Img/SceneConfiguration1.png}
+            \caption{Attributi e metodi della classe \textit{SceneConfiguration}.}
+        \end{figure}    
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La funzione \textit{ApplySettings()} modifica la proprietà 
+        \textit{Object.SetActive()}, che comunica al motore se un \textit{GameObject} 
+        deve essere mostrato all'utente;
+        viene implementata come segue:
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{Img/SceneConfiguration2.jpeg}
+            \caption{Funzione \textit{ApplySettings()} in \textit{SceneConfiguration}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%       
+        \newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Gestione dell'interfaccia, \textit{SceneManager} e chiusura dell'applicazione}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            Le diverse sezioni del programma sono organizzate all'interno di separate 
+            scene \textit{\textbf{Unity}}\footnote
+            {Una scena, in \textit{\textbf{Unity}}, è un gruppo di \textit{assets} e 
+            componenti raggruppati secondo uno scopo comune dallo sviluppatore.}.
+            Per il controllo e la gestione delle scene, \textbf{SignVR} utilizza l'
+            \textit{API} \textit{SceneManager}
+            messa a disposizione dal motore\cite{unity_manual_2026} e implementa diversi 
+            \textit{scripts}:
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item Il passaggio da una scena all'altra viene gestito dalla classe \textit{SceneSwitch}, definita nello script \textit{SceneSwitch.cs}:
+                \begin{figure}[h]
+                    \centering
+                    \includegraphics[scale=0.6]{Img/SceneSwitch.jpeg}
+                    \caption{\textit{SceneSwitch} contiene una sola funzione che interagisce 
+                    con \textit{SceneManager} per cambiare scena.}
+                \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+                \item Il cambio di scena che permette l'apertura del pannello delle 
+                impostazioni è l'unico che non utilizza \textit{SceneSwitch} direttamente:
+%---------------------------------%%---------------------------------%%---------------------------------%
+                    \begin{figure}[h]
+                        \centering
+                        \includegraphics[scale=0.5]{Img/GoToSettings.jpeg}
+                        \caption{lo \textit{script} \textit{GoToSettings.cs} utilizza una 
+                        \textit{coroutine}, ovvero un metodo cui esecuzione può essere interrotta 
+                        e successivamente ripresa in ogni momento\cite{unity_manual_2026}.}
+                    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+                \newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+                Questo \textit{script} viene utilizzato per aggiungere una latenza 
+                artificiale dalla richiesta effettuata dall'utente per accedere alle 
+                impostazioni fino al caricamento del pannello di impostazioni stesso:
+                permette all'utente di visualizzare un messaggio a schermo in modo da 
+                non confonderlo durante l'utilizzo del \textit{software}.
+                \item La chiusura dell'applicazione avviene sempre utilizzando lo 
+                \textit{script} \textit{CloseApplication.cs}, implementato come segue: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[scale=0.6]{Img/CloseApplication.jpeg}
+                        \caption{lo \textit{script} definisce una classe 
+                        \textit{CloseApplication} con un solo metodo \textit{Quit}.}
+                    \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Gestures}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \textbf{SignVR} utilizza \textit{gestures} per accedere a diverse 
+        funzionalità dell'applicazione, le \textit{gestures}
+        disponibili all'utente sono: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item \textbf{\textit{Pinch}}: utilizzato per selezionare e muovere elementi 
+            dell'interfaccia nello spazio;
+            \item \textbf{Impostazioni}: di \textit{default} posizionata sulla mano destra 
+            dell'utente, per accedere al pannello impostazioni;
+            \item \textbf{Accesso allo \textit{Speech-To-Text}}: di \textit{default} 
+            posizionata sulla mano sinistra dell'utente, permette l'attivazione del 
+            microfono per la \textit{Speech-To-Text}.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \subsubsection{Riconoscimento delle mani}
+%---------------------------------%%---------------------------------%%---------------------------------%
+                Il riconoscimento delle mani avviene nativamente all'interno del 
+                \textit{Meta Quest}. L'utilizzo del \textit{Meta XR Interaction SDK} 
+                permette di utilizzare tale riconoscimento al fine di implementare 
+                \textit{gestures} all'interno del \textit{software}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \subsubsection{Implementazione delle gestures}
+%---------------------------------%%---------------------------------%%---------------------------------%
+                Le \textit{gestures} vengono importate dalle scene d'esempio del 
+                \textit{Meta XR Interaction SDK} per essere successivamente rielaborate:
+%---------------------------------%%---------------------------------%%---------------------------------%
+                \begin{itemize}
+                    \item Vengono modificati gli \textit{scripts} chiamati durante 
+                    l'utilizzo delle \textit{gestures};
+                    \item viene modificata la resa visiva del bottone per lo 
+                    \textit{Speech-To-Text};
+                    \item viene modificato il comportamento della \textit{gesture} 
+                    impostazioni\footnote{Originariamente chiamata \textit{scissor} 
+                    nel \textit{Meta XR Interaction SDK}.}.
+                \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Implementazione al supporto per controller Meta Quest}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Il supporto per \textit{controller Meta Quest} viene integrato attraverso 
+        \textbf{Building Blocks}. I controlli vengono re-impostati per seguire le esigenze 
+        del \textit{software}, in particolare: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item \textbf{Bottoni X, A}: permettono di attivare e disattivare lo 
+            \textit{Speech-To-Text};
+            \item \textbf{Bottoni Y, B}: permettono di accedere alle impostazioni;
+            \item \textbf{Primary \& Secondary Index Trigger}: permettono di eseguire il 
+            \textit{pinch} degli elementi dell'interfaccia.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Implementazione dello \textit{Speech-To-Text}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La funzione di \textit{Speech-To-Text} permette la ripresa e successiva 
+        trascrizione del parlato inglese.
+        Viene implementata utilizzando \textit{Meta Voice SDK} ed il servizio 
+        \textbf{Wit.ai}, in particolare: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item Viene importato lo \textit{script} che definisce la classe 
+            \textit{AppDictationExperience}\footnote{Classe definita nel 
+            \textit{Meta Voice SDK}, si occupa di gestire la dettatura.};
+            \item vengono apportate modifiche riguardo i tempi di ripresa dell'audio 
+            del parlato;
+            \item viene integrato il sistema di \textbf{Wit.ai} per ottenere il testo 
+            della trascrizione.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/wit.ai.jpeg}
+            \caption{Interfaccia di \textit{Wit.ai}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Periodo di ascolto e soglia di silenzio}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La ripresa del parlato in lingua inglese è condizionata dal tempo di esecuzione e 
+        dal livello di pressione sonora rilevato dal microfono collegato o integrato al visore.
+        \\\textit{Meta Voice SDK} definisce la classe \textit{AppDictationExperience}, 
+        che permette la modifica, mediante l'\textit{inspector} di \textbf{Unity}, 
+        dei parametri che controllano il tempo di ripresa.
+        L'applicazione è stata testata in ambienti con basso e alto profilo di rumore ambientale,
+        utilizzando il microfono integrato al \textit{Meta Quest} per il parlato dell'utente 
+        che indossa il visore\footnote{La \textit{feature} di \textit{Noise Cancelling} che 
+        \textit{Meta Quest} applica al microfono integrato rende impossibile la ripresa del parlato
+        da parte di un interlocutore terzo, richiedendo l'utilizzo di un microfono esterno.}.
+            \label{sogliasilenzio}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Implementazione della trascrizione in \textit{Gloss}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    La trascrizione dall'inglese all'\textit{American Sign Language} viene gestita mediante 
+    \textbf{LLaMA}.
+    Vengono implementati i seguenti \textit{scripts}:
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \begin{itemize}
+        \item \textit{\textbf{VoiceDictationManager.cs}}: Si occupa di ricevere il testo 
+        in lingua inglese, mostrarlo a schermo e mandarlo al \textit{Large Language Model} 
+        per essere trascritto;
+        \item \textit{\textbf{LlmTranslationHandler.cs}}: fornisce un \textit{prompt} al 
+        \textit{Large Language Model}, gestisce le richieste e riceve la risposta contenente 
+        il testo in \textit{Gloss}.
+    \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Ricezione del testo e \textit{VoiceDictationManager}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Lo \textit{script} definisce una classe \textit{VoiceDictationManager} con diversi 
+        attributi per: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item Controllare le icone mostrate a schermo durante l'utilizzo dello 
+            \textit{Speech-To-Text};
+            \item Modificare il testo della trascrizione in lingua inglese;
+            \item Integrare il \textit{Large Language Model};
+            \item Integrare la classe \textit{AppDictationExperience}.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.5]{Img/voicedic2.png}
+                \caption{Attributi della classe \textit{VoiceDictationManager}.}
+            \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La classe \textit{VoiceDictationManager} implementa metodi per attivare o 
+        disattivare la dettatura aggiornando conseguentemente l'UI, come visto in figura 
+        \ref{uiupdatevoicedic},
+        e per la gestione della trascrizione parziale e completa del parlato
+        \footnote{Con trascrizione parziale si intende la trascrizione che avviene quando 
+        l'interlocutore sta ancora parlando e la ripresa è attiva, la trascrizione 
+        è considerata completa quando la dettatura è stata interrotta.}, con successiva 
+        modifica del testo dell'interfaccia e invio al modello di linguaggio, 
+        presenti in figura \ref{fullpartial}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.6]{Img/voicedic1.png}
+                \caption{Funzioni che controllano la \textit{AppDictationExperience} e che modificano il colore della UI in \textit{VoiceDictationManager.cs}.}
+               \label{uiupdatevoicedic} 
+            \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{figure}[H]
+                \centering
+                \includegraphics[scale=0.5]{Img/voicedic3.png}
+                \caption{Funzioni che controllano la trascrizione totale e parziale, con conseguente aggiornamento del testo nell'interfaccia utente.}
+                \label{fullpartial}
+            \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Definizione del \textit{Prompt} per la trascrizione in \textit{Gloss}}
+            \label{prompt}    
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Il testo ottenuto dalla trascrizione completa, gestita dal 
+        \textit{VoiceDictationManager} e dalla \textit{AppDictationExperience}, 
+            viene mostrato all'utente nel pannello apposito e inviato a 
+            \textit{\textbf{LLaMA}} per la rielaborazione in \textit{Gloss}.
+            In \textbf{SignVR}, il modello di linguaggio opera seguendo un 
+            \textit{prompt} che lo istruisce sulla procedura da seguire:
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \begin{itemize}
+                \item Viene fornito contesto sul ruolo del modello;
+                \item vengono fornite le regole di \textit{glossing};
+                \item vengono forniti esempi sfruttando il \textit{Few-Shot Learning}
+                \footnote{Il \textit{Few-Shot Learning} è un approccio utilizzato in 
+                \textit{Machine Learning}, permette la generalizzazione di un concetto 
+                sfruttando le conoscenze pregresse del modello ed una serie di esempi 
+                limitata.};
+                \item viene fornita una \textit{Task} che il modello deve seguire.
+            \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            Il \textit{prompt} viene concatenato alla trascrizione ed inviato al modello 
+            di linguaggio, mentre la risposta del modello viene mostrata all'utente attraverso 
+            l'interfaccia.
+            \\Segue il \textit{prompt} utilizzato:\footnote{La versione presente in 
+            \textbf{SignVR} include diversi esempi, omessi in questo documento per brevità.}
+%---------------------------------%%---------------------------------%%---------------------------------%
+            \newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+\begin{verbatim}
+You are an expert American Sign Language (ASL) translator. 
+Your task is to translate standard English text into ASL Gloss notation. 
+### GLOSSING RULES:
+1. FORMAT: Output ONLY the translated glosses in UPPERCASE. 
+    No explanations, no punctuation, no question marks.
+    
+2. GRAMMAR STRUCTURE: Use the order: 
+    TIME + OBJECT + SUBJECT + VERB + QUESTION-WORD/NEGATION.
+    
+3. OMISSIONS: Remove all articles (a, an, the), 
+    remove all 'to be' verbs (am, is, are, was, were), 
+    and remove prepositions (to, of) unless necessary for direction.
+    
+4. VERBS & NOUNS: Use the root form of words. Remove '-ing', '-ed', 
+    and plural 's'. (e.g., 'cats' -> 'CAT', 'walking' -> 'WALK').
+    
+5. ADJECTIVES: Place adjectives AFTER the noun (e.g., 'Red car' -> 'CAR RED').
+    
+6. NEGATION: Place 'NOT' or 'NONE' at the END of the sentence 
+    or immediately before the verb.
+    
+7. QUESTIONS: Place WH-words (WHO, WHAT, WHERE, WHEN, WHY, HOW) at the VERY END.
+    
+8. PRONOUNS (CRITICAL): Preserve the exact point of view. 
+    If input is 'YOU', output is 'YOU'. Do NOT answer the question. 
+    
+9. GREETINGS: Do not remove greetings such as hi or hello.
+
+### EXAMPLES (Few-Shot Learning):
+    Input: I am going to the store tomorrow.
+    Output: TOMORROW STORE I GO
+    ...
+    Input: I have two dogs.
+    Output: DOG TWO I HAVE
+
+### TASK:
+    Translate the following English text to ASL Gloss(...) 
+\end{verbatim}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    %\newpage 
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsubsection{Gestione dell'\textit{LLM} attraverso \textit{LlmTranslationHandler}}
+    \label{trascrizioneglossllama}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Lo script \textit{LlmTranslationHandler.cs} definisce la classe 
+        \textit{LlmTranslationHandler}, che gestisce le richieste poste a 
+        \textit{\textbf{LLaMA}} e le rispettive risposte.
+        La classe possiede attributi per la gestione dell'\textit{LLM}, 
+        gestione delle animazioni e testo della notazione in \textit{Gloss}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{Img/llmattributi.png}
+            \caption{Attributi della classe \textit{LlmTranslationHandler}. 
+            Tra gli attributi della classe vi è anche il \textit{prompt}, 
+            affrontato al paragrafo \ref{prompt}, omesso per brevità.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La classe implementa i metodi \textit{SendTranslationRequest()}, 
+        per inviare il testo al modello di linguaggio, e \textit{HandleLlmResponse()}, 
+        che riformatta il testo, lo mostra sullo schermo e chiama l'\textit{AnimatorHandler} 
+        per eseguire l'animazione.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/llm2.png}
+            \caption{Metodi implementati nella classe \textit{LlmTranslationHandler}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{Animazioni e interpreti virtuali}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Standardizzazione e interpolazione delle animazioni}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Le animazioni utilizzate da \textbf{SignVR} sono frutto della normalizzazione dei 
+        \textit{dataset} utilizzati\footnote{Si noti che la normalizzazione è stata 
+        effettuata su un numero limitato di animazioni e non su tutte quelle disponibili 
+        dai \textit{datasets}\ref{limitazionidataset}.}, 
+        che segue le regole affrontate al paragrafo \ref{regoleAnimazione}.
+        La normalizzazione delle animazioni rende prevedibile la durata, nonché il 
+        posizionamento dei movimenti chiave su tutte le parole del vocabolario.
+        Al verificarsi di una traduzione contenente due o più parole, si avrebbero un 
+        totale di 80 \textit{frames} di riposizionamento da \textit{key-pose} ad 
+        \textit{idle} e viceversa, a fronte di 40 \textit{frames} di animazione effettiva, 
+        introducendo
+        informazioni non necessarie all'utente e rallentando la traduzione, oltre che 
+        forzando l'interprete virtuale ad assumere un comportamento innaturale.
+        Per ovviare a questo problema, le animazioni vengono tagliate ed interpolate: gli ultimi 40 
+        \textit{frames} della prima animazione e i primi 40 della seconda vengono tagliati, scartando 80
+        \textit{frames} superflui, viene poi applicato il metodo \textit{CrossFade()} per transitare da un'animazione all'altra.
+        ciò permette di rimuovere informazioni non fondamentali, 
+        mantenere naturalezza nelle animazioni dell'interprete e
+        utilizzare le stesse animazioni indipendentemente dal loro posizionamento 
+        all'interno della frase.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{\textit{AnimationHandler} come coordinatore delle animazioni}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La gestione delle animazioni viene affidata all'\textit{AnimationHandler}, 
+        classe definita nello \textit{script} \textit{AnimationHandler.cs}.
+        La classe possiede un attributo \textit{Animator} per il controllo delle animazioni 
+        all'interno del motore \textbf{Unity}, attributi riguardo il \textit{frame-rate}
+        e la durata delle animazioni ed una Coda \textit{First-In First-Out}\footnote{Le code 
+        \textit{FIFO} sono strutture 
+        dati dove l'ordine di rimozione degli elementi è condizionato all'ordine 
+        in cui sono essi vengono aggiunti:
+        il primo elemento aggiunto alla lista sarà il primo ad uscire.} per gestire
+        la coda delle animazioni.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/correzzionecipo.jpeg}
+            \caption{Attributi della classe \textit{AnimationHandler}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \textit{AnimationHandler} possiede diversi metodi per la corretta gestione della animazioni: 
+        \textit{ProcessQueueRoutine()} si occupa di scorrere la coda una stringa per volta, 
+        attendendo il completamento di ogni animazione: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.4]{Img/processqueueroutine.png}
+            \caption{Implementazione della funzione \textit{ProcessQueueRoutine()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La funzione \textit{ProcessAndAnimate()} si occupa di aggiungere nuove stringhe
+        alla coda; se non ci sono animazioni in corso si occupa anche di chiamare \textit{
+        ProcessQueueRoutine()}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{Img/ProcessAndAnimate.png}
+            \caption{Implementazione della funzione \textit{ProcessAndAnimate()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La gestione della singola stringa di testo viene affidata al metodo 
+        \textit{AnimatePhraseRoutine()}: La stringa viene divisa in parole, ognuna elemento
+        di un \textit{array}, verifica se sono presenti nel vocabolario e comunica se queste
+        sono la prima o l'ultima ad essere riprodotte.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/AnimatePhraseRoutine.png}
+            \caption{Implementazione della funzione \textit{AnimatePhraseRoutine()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Le funzioni \textit{PlayWordAnimation()} e \textit{PlayWordSpelling()} vengono
+        invocate sulla base del controllo eseguito sulle singole parole dell'\textit{array}:
+        le parole presenti nel vocabolario vengono riprodotte:
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item Per intero se la parola è sia la prima che l'ultima;
+            \item tagliando gli ultimi 30 \textit{frames} se la parola è la prima;
+            \item tagliando i primi 30 \textit{frames} se la parola è l'ultima;
+            \item tagliando i primi e gli ultimi 30 \textit{frames} se la parola è in una
+            posizione generica.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        La riproduzione delle parole in sequenza avviene mediante la 
+        funzione \textit{CrossFade()}, definita nella classe \textit{Animator};
+        La funzione \textit{PlayWordSpelling()} segue lo stesso principio ma converte
+        la parola ricevuta in un \textit{array} di caratteri.
+
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/PlayWordAnimation.png}
+            \caption{Implementazione della funzione \textit{PlayWordAnimation()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.3]{Img/PlayWordSpelling.png}
+            \caption{Implementazione della funzione \textit{PlayWordSpelling()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+    \subsection{\textit{Lazy-Follow} e movimento dell'interfaccia}
+        \label{lazyf}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Il comportamento dell'interfaccia rispetto al movimento del capo dell'utente viene
+        gestito dallo \textit{script} \textit{LazyFollow.cs}, con l'obbiettivo di modificare
+        la posizione dei moduli seguendo il movimento del visore. Questa funzionalità può 
+        essere disattivata dall'utente\ref{impostazioni} lasciando che la gestione degli elementi a schermo 
+        venga gestita dal sistema di \textit{boundaries} e confini del \textit{Meta Quest}.
+        
+        \subsubsection{Attributi dello \textit{script} e definizione del comportamento}
+
+        Viene definito un attributo \textit{Dead Zone Angle} che rappresenta l'angolo massimo
+        di movimento del capo dell'utente rispetto l'interfaccia prima che lo \textit{script}
+        entri in azione. Vengono anche definiti \textit{Dead Zone Distance} e 
+        \textit{Follow Speed Multiplier}, variabili che controllano rispettivamente la 
+        distanza massima dell'utente dall'interfaccia e la velocità con cui la stessa raggiunge
+        il punto calcolato dallo \textit{script}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.4]{Img/lazyfollowattributi.png}
+            \caption{Attributi della classe \textit{LazyFollow}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Vengono definiti altri attributi per il posizionamento dell'interfaccia,
+        per il controllo della rotazione e per la logica della classe.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Avvio dello \textit{script} e \textit{ForceUpdatePosition()}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Il metodo \textit{ForceUpdatePosition()} pone la posizione del 
+        \textit{GameObject} a cui è applicato lo \textit{script} ad un \textit{offset}
+        rispetto la telecamera\footnote{Con camera si fa riferimento al \textit{Camera Rig},
+        implementato mediante \textbf{Meta Building Blocks}.}; 
+        lo \textit{script} è sempre applicato al \textit{GameObject}
+        rappresentante l'interfaccia.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.6]{Img/forceupdateposition.png}
+            \caption{Implementazione del metodo \textit{ForceUpdatePosition()} nella classe \textit{LazyFollow}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \textit{ForceUpdatePosition()} viene sempre eseguito all'interno del metodo \textit{Start()}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Funzione di \textit{LateUpdate()}, controllo della posizione e
+        movimento dell'interfaccia}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Viene ridefinita la funzione \textit{LateUpdate()} al fine di: 
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{itemize}
+            \item Calcolare la distanza ideale tra \textit{camera} e pannelli;
+            \item calcolare l'eventuale trasformazione da applicare al \textit{GameObject},
+            tenendo in considerazione eventuali blocchi sulle assi;
+            \item abilitare e disabilitare il \textit{Following}, che indica quando è necessario
+            applicare una trasformazione;
+            \item applicare trasformazioni di posizione e rotazione al \textit{GameObject}.
+        \end{itemize}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.4]{Img/mm2.png}
+            \caption{Calcolo della posizione ideale e della posizione finale,
+            verifica delle condizioni necessarie per abilitare il \textit{Following} in \textit{LateUpdate()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.4]{Img/mm3.png}
+            \caption{Applicazione della trasformazione e rotazione in \textit{LateUpdate()}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \subsubsection{Gestione della rotazione tramite \textit{HandleRotation()}}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Il metodo, definito nello \textit{script} \textit{LazyFollow.cs}, viene utilizzato per 
+        gestire l'applicazione della rotazione. Vengono identificati gli angoli di rotazione 
+        che devono essere raggiunti sulla base della presenza o meno di un blocco imposto, viene
+        successivamente applicata la rotazione.
+
+%---------------------------------%%---------------------------------%%---------------------------------%
+        \begin{figure}[H]
+            \centering
+            \includegraphics[scale=0.5]{Img/lalalalalalalalalalalalala.png}
+            \caption{Implementazione del metodo \textit{HandleRotation()} in \textit{LazyFollow}.}
+        \end{figure}
+%---------------------------------%%---------------------------------%%---------------------------------%
+        Lo \textit{script} rappresenta la rotazione mediante quaternioni e utilizza la funzione
+        \textit{Quaternion.Slerp()} per applicare la transizione tra la posizione precedente e 
+        quella desiderata.
+
+\section{Note conclusive}
+%---------------------------------%%---------------------------------%%---------------------------------%
+Il \textit{software} è stato sviluppato da Davide Leotta, Elena Giunta e Damiano Rinaldi,
+studenti del CdL. triennale in Informatica presso l'Università degli Studi di Catania.
+Per quanto il gruppo di lavoro abbia sviluppato \textbf{SignVR} in sinergia, vi è stata
+una suddivisione degli incarichi e definizione dei ruoli per velocizzarne lo sviluppo.
+
+
+La produzione degli \textit{assets} grafici, \textit{design} e sviluppo del comparto 
+\textit{UI/UX}\footnote{\textit{User Interface} e \textit{User Interaction}.}
+vengono implementate da \textbf{Elena Giunta}.
+
+
+La gestione delle animazioni, integrazione dell'\textit{LLM} e l'implementazione
+della funzionalità di \textit{Lazy Follow} sono state realizzate da \textbf{Davide Leotta}.
+
+
+La prototipazione, il \textit{Wireframing} e l'implementazione di alcune funzionalità \textit{UI}
+sono state attuate da \textbf{Damiano Rinaldi}.
+%---------------------------------%%---------------------------------%%---------------------------------%
+\newpage
+%---------------------------------%%---------------------------------%%---------------------------------%
+\printbibliography{}
+%---------------------------------%%---------------------------------%%---------------------------------%
+\end{document}
+
+
+
+%tigku mamaguguo
