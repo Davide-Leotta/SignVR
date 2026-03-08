@@ -1,42 +1,59 @@
-<h1>SignVR🥽</h1>
-A Real-Time english to American Sign Language (ASL) translation software for Meta Quest 3.
+# SignVR 🥽
+A Real-Time English to American Sign Language (ASL) translation software for Meta Quest 3.
 
-<h2>READ THIS BEFORE YOU CLONE</h2>
+## ⚠️ READ THIS BEFORE YOU CLONE
 Due to the large size of files stored in this repo, you'll need Git LFS to download it correctly.
 
-> + Get Git LFS [Here](https://git-lfs.com/)
-> + git lfs clone https://github.com/fnxwarehouse/SignVR.git
+* Get Git LFS [Here](https://git-lfs.com/)
+* `git lfs clone https://github.com/fnxwarehouse/SignVR.git`
 
-<h2>What is SignVR?</h2>
-SignVR is a translation tool from english to ASL and Gloss notation,
-Developed in Unity for the Meta Quest VR.
+## What is SignVR?
+SignVR is a translation tool from English to ASL and Gloss notation, developed in Unity for the Meta Quest VR.
 
-<h2>Why was SignVR developed?</h2>
-This project was developed as an assignment for the "Mixed Reality and Wearable Vision" class in University of Catania's Computer Science Course.
-The software was not built to be a released commercial product.
+## Why was SignVR developed?
+This project was developed as an assignment for the "Mixed Reality and Wearable Vision" class in University of Catania's Computer Science Course. The software was not built to be a released commercial product.
 
-<h2>Who developed SignVR?</h2>
+## Who developed SignVR?
 SignVR was made by a joint effort from @Davide-Leotta, @Paranojike and @fnxwarehouse.
 
-<h2>Tech used in SignVR</h2>
+## Tech used in SignVR
 SignVR was made in Unity and C#. 
 
-> + Meta XR SDK 
-> + LLaMA 3.3 70B Versatile was used for Gloss Notation translation.
-> + Wit.AI was used for Speech-To-Text integration.
+* Meta XR SDK 
+* LLaMA 3.3 70B Versatile (via Groq) was used for Gloss Notation translation.
+* Wit.AI was used for Speech-To-Text integration.
 
-<h2>Datasets for ASL Animations</h2>
-SignVR uses animations from two datasets accordingly to their licenses.
-You can find them here: 
+## 🔑 Setup & API Keys
+For security reasons before uploading the repository to GitHub, the API keys required for the LLM connection on Groq and the Wit.AI service have been removed. 
+To run the software correctly, you will need to generate your own API keys and insert them into the project files:
 
-> + [SLMocapArchive](https://github.com/StudioGalt/Sign-Language-Mocap-Archive) @StudioGalt
-> + [3D-LEX v1.0: 3D Lexicons for American Sign Language and Sign Language of the Netherlands](https://arxiv.org/abs/2409.01901)
+1. **Groq (LLaMA 3.3)**: 
+   * Navigate to `SignVR/SignVR/Assets/MetaXR/LargeLanguageModels_HuggingFace_ProviderProfile.asset`.
+   * Open the file and paste your API key in the empty `apiKey:` field.
+2. **Wit.AI (Speech-To-Text)**: 
+   * Navigate to `SignVR/SignVR/ProjectSettings/wit.config`.
+   * Open the file, replace `"INSERISCI_IL_TUO_APP_ID"` with your Wit.AI App ID, and fill the empty `"serverToken":""` field with your server token.
 
-<h2>What words are translated in SignVR?</h2>
-SignVR has a vocabulary of 40 words and all the english alphabet.
-It can virtually translate any word via spelling.
+### ⚠️ Important Notice: No Pre-built APK
 
-<h2>Were can I find SignVR docs?</h2>
-Due to the scope of the project being an assignment for a university class, no developer-oriented documentation was made.
-You can find a report that explains in detail how the project was made, explained snippets of code and other infos inside the 'Docs' folder.
-A translation in English of the report is being made.
+For security reasons, we have decided **not** to include a pre-built APK in this release. 
+
+Distributing a functional application would require including personal API keys for **Groq (LLaMA 3.3)** and **Wit.AI (Speech-To-Text)** directly in the build, which poses a severe security risk.
+
+To fully test and experience **SignVR**, you will need to build the project yourself:
+1. Clone the repository using Git LFS.
+2. Generate your own free API keys from Groq and Wit.AI.
+3. Insert them into the Unity project as detailed in the `Setup & API Keys` section of our [README].
+4. Build the APK directly via Unity and deploy it to your Meta Quest 3.
+
+## Datasets for ASL Animations
+SignVR uses animations from two datasets according to their licenses. You can find them here: 
+
+* [SLMocapArchive](https://github.com/StudioGalt/Sign-Language-Mocap-Archive) @StudioGalt
+* [3D-LEX v1.0: 3D Lexicons for American Sign Language and Sign Language of the Netherlands](https://arxiv.org/abs/2409.01901)
+
+## What words are translated in SignVR?
+SignVR has a vocabulary of 40 words and all the English alphabet. It can virtually translate any word via spelling.
+
+## Where can I find SignVR docs?
+Due to the scope of the project being an assignment for a university class, no developer-oriented documentation was made. You can find a report that explains in detail how the project was made, explained snippets of code and other information inside the `Docs` folder. A translation in English of the report is currently being made.
