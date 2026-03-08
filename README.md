@@ -5,7 +5,7 @@ A Real-Time English to American Sign Language (ASL) translation software for Met
 Due to the large size of files stored in this repo, you'll need Git LFS to download it correctly.
 
 * Get Git LFS [Here](https://git-lfs.com/)
-* `git lfs clone [https://github.com/Davide-Leotta/SignVR.git](https://github.com/Davide-Leotta/SignVR.git)`
+* `git lfs clone https://github.com/Davide-Leotta/SignVR.git`
 
 ## What is SignVR?
 SignVR is a translation tool from English to ASL and Gloss notation, developed in Unity for the Meta Quest VR.
