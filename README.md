@@ -8,7 +8,7 @@ Due to the large size of files stored in this repo, you'll need Git LFS to downl
 * `git lfs clone https://github.com/Davide-Leotta/SignVR.git`
 
 ## What is SignVR?
-SignVR is a translation tool from English to ASL and Gloss notation, developed in Unity for the Meta Quest VR.
+SignVR is a translation tool from English to ASL and Gloss notation, developed in Unity 6000.2.8f1 for the Meta Quest VR.
 
 ## Why was SignVR developed?
 This project was developed as an assignment for the "Mixed Reality and Wearable Vision" class in University of Catania's Computer Science Course. The software was not built to be a released commercial product.
@@ -19,9 +19,9 @@ SignVR was made by a joint effort from @Davide-Leotta, @Paranojike and @fnxwareh
 ## Tech used in SignVR
 SignVR was made in Unity and C#. 
 
-* Meta XR SDK 
-* LLaMA 3.3 70B Versatile (via Groq) was used for Gloss Notation translation.
-* Wit.AI was used for Speech-To-Text integration.
+* **Meta XR SDK**
+* **LLaMA 3.3 70B Versatile** (via Groq) was used for Gloss Notation translation.
+* **Wit.AI** was used for Speech-To-Text integration.
 
 ## 🔑 Setup & API Keys
 For security reasons before uploading the repository to GitHub, the API keys required for the LLM connection on Groq and the Wit.AI service have been removed. 
