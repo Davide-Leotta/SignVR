@@ -43,7 +43,7 @@ Distributing a functional application would require including personal API keys 
 To fully test and experience **SignVR**, you will need to build the project yourself:
 1. Clone the repository using Git LFS.
 2. Generate your own free API keys from Groq and Wit.AI.
-3. Insert them into the Unity project as detailed in the `Setup & API Keys` section of our [README].
+3. Insert them into the Unity project as detailed in the `Setup & API Keys` section of our [README](#-setup--api-keys).
 4. Build the APK directly via Unity and deploy it to your Meta Quest 3.
 
 ## Datasets for ASL Animations
