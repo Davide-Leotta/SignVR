@@ -35,7 +35,6 @@ To run the software correctly, you will need to generate your own API keys and i
    * Open the file, replace `"INSERISCI_IL_TUO_APP_ID"` with your Wit.AI App ID, and fill the empty `"serverToken":""` field with your server token.
 
 ### ⚠️ Important Notice: No Pre-built APK
-
 For security reasons, we have decided **not** to include a pre-built APK in this release. 
 
 Distributing a functional application would require including personal API keys for **Groq (LLaMA 3.3)** and **Wit.AI (Speech-To-Text)** directly in the build, which poses a severe security risk.
