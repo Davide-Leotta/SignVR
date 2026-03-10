@@ -56,3 +56,6 @@ SignVR has a vocabulary of 40 words and all the English alphabet. It can virtual
 
 ## Where can I find SignVR docs?
 Due to the scope of the project being an assignment for a university class, no developer-oriented documentation was made. You can find a report that explains in detail how the project was made, explained snippets of code and other information inside the `Docs` folder. A translation in English of the report is currently being made.
+
+## 📄 License
+This project is licensed under the **PolyForm Noncommercial License 1.0.0**. Please see the `LICENSE` file included in this repository for the full terms and conditions.
