@@ -1,6 +1,14 @@
 # SignVR 🥽
 A Real-Time English to American Sign Language (ASL) translation software for Meta Quest 3.
 
+## 🎥 Demo in Action
+
+https://github.com/user-attachments/assets/95892ec5-e4cb-45df-9d3e-f8a069ce50d5
+
+https://github.com/user-attachments/assets/8f4705d6-1d8d-4a4e-93d1-e515e91bac31
+
+https://github.com/user-attachments/assets/baa2cb5f-c642-4c72-b4c1-2a983e0ad2fa
+
 ## ⚠️ READ THIS BEFORE YOU CLONE
 Due to the large size of files stored in this repo, you'll need Git LFS to download it correctly.
 
