@@ -1,4 +1,4 @@
-# SignVR 🥽
+# SignVR
 A Real-Time English to American Sign Language (ASL) translation software for Meta Quest 3.
 
 <video src="https://github.com/user-attachments/assets/baa2cb5f-c642-4c72-b4c1-2a983e0ad2fa" width="50%" autoplay></video>
